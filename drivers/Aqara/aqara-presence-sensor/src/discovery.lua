@@ -20,6 +20,7 @@ function discovery.set_device_field(driver, device)
 end
 
 local function update_device_discovery_cache(driver, dni, ip)
+  log.trace(string.format("Starting update_device_discovery_cache : dni= %s", dni))
   local device_info = driver.discovery_helper.get_device_info(driver, dni, ip)
   if driver.datastore.discovery_cache[dni] == nil then
     driver.datastore.discovery_cache[dni] = {}
@@ -32,8 +33,10 @@ local function try_add_device(driver, device_dni, device_ip)
   log.trace(string.format("try_add_device : dni= %s, ip= %s", device_dni, device_ip))
 
   update_device_discovery_cache(driver, device_dni, device_ip)
+  log.trace(string.format("Starting get_device_create_msg : dni= %s", device_dni))
   local create_device_msg = driver.discovery_helper.get_device_create_msg(driver, device_dni, device_ip)
 
+  log.trace(string.format("Starting get_credential : dni= %s", device_dni))
   local credential = driver.discovery_helper.get_credential(driver, device_dni, device_ip)
 
   if not credential then
